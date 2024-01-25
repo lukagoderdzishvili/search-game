@@ -22,10 +22,11 @@ export default class Controller{
         const width: number = (innerWidth / 1024);
         const height: number = (innerHeight / 2000)
         const scale: number = Math.min(width, height);
-        const offset: number = 100 * scale;
+        const offsetX: number = 100 * scale;
+        const offsetY: number = 250 * scale;
 
         this._topArrow = this._scene.add
-        .image(innerWidth / 2, offset, Configs.arrow.texture)
+        .image(innerWidth / 2, offsetY, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
         .setInteractive({ cursor: 'pointer' });
@@ -33,7 +34,7 @@ export default class Controller{
 
         
         this._bottomArrow = this._scene.add
-        .image(innerWidth / 2, innerHeight - offset, Configs.arrow.texture)
+        .image(innerWidth / 2, innerHeight - offsetY, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
         .setRotation(Phaser.Math.DegToRad(180))
@@ -43,7 +44,7 @@ export default class Controller{
         
 
         this._leftArrow = this._scene.add
-        .image(offset, innerHeight / 2, Configs.arrow.texture)
+        .image(offsetX, innerHeight / 2, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
         .setRotation(Phaser.Math.DegToRad(-90))
@@ -53,7 +54,7 @@ export default class Controller{
 
         
         this._rightArrow = this._scene.add
-        .image(innerWidth - offset, innerHeight / 2, Configs.arrow.texture)
+        .image(innerWidth - offsetX, innerHeight / 2, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
         .setRotation(Phaser.Math.DegToRad(90))
@@ -84,24 +85,24 @@ export default class Controller{
         const height: number = (innerHeight / 2000)
         const scale: number = Math.min(width, height);
 
-        const offset: number = 100 * scale;
-
+        const offsetX: number = 100 * scale;
+        const offsetY: number = 250 * scale;
         this._leftArrow
-        .setPosition(offset, innerHeight / 2)
+        .setPosition(offsetX, innerHeight / 2)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale);
         
         this._rightArrow
-        .setPosition(innerWidth - offset, innerHeight / 2)
+        .setPosition(innerWidth - offsetX, innerHeight / 2)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale);
 
         
         this._topArrow
-        .setPosition(innerWidth / 2, offset)
+        .setPosition(innerWidth / 2, offsetY)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale);
 
         
         this._bottomArrow
-        .setPosition(innerWidth / 2, innerHeight - offset)
+        .setPosition(innerWidth / 2, innerHeight - offsetY)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale);
     }
     
