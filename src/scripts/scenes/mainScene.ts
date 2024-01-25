@@ -48,7 +48,7 @@ export default class MainScene extends Phaser.Scene{
     }
 
     private _controllerCallback = (x: number, y: number): void => {
- 
+        if(!this._background) return;
         // Pan the camera to the new position
         this.cameras.main.scrollX += x;
         this.cameras.main.scrollY += y;
@@ -61,7 +61,7 @@ export default class MainScene extends Phaser.Scene{
         if(!this._background) return;
 
         const width: number = (innerWidth / 1024);
-        const height: number = (innerHeight / 2000)
+        const height: number = (innerHeight / 2000);
         const scale: number = Math.min(width, height);
         this._background
         ?.setPosition(0, 0)
@@ -72,11 +72,14 @@ export default class MainScene extends Phaser.Scene{
 
     }
 
+
+
     public onScreenChange(): void{
         console.log('resize event');
         this._resizeBackground();
         this._levelContainer?.onScreenChange();
         this._avatarContainer?.onScreenChange();       
         this._controller?.onScreenChange(); 
+        this._controllerCallback(0, 0);
     }
 }
