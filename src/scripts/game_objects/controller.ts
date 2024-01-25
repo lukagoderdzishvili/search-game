@@ -2,15 +2,19 @@ import Configs from "../statics/configs";
 
 export default class Controller{
     private _scene: Phaser.Scene;
+    private _arrowClickCallback: (x: number, y: number) => void;
+
     private _leftArrow!: Phaser.GameObjects.Image;
     private _rightArrow!: Phaser.GameObjects.Image;
     private _topArrow!: Phaser.GameObjects.Image;
     private _bottomArrow!: Phaser.GameObjects.Image;
 
-    constructor(scene: Phaser.Scene){
+    constructor(scene: Phaser.Scene, arrowClickCallback: (x: number, y: number) => void){
         this._scene = scene;
+        this._arrowClickCallback = arrowClickCallback;
 
         this._create();
+        this._addEvents();
     }
 
 
@@ -23,7 +27,8 @@ export default class Controller{
         this._topArrow = this._scene.add
         .image(innerWidth / 2, offset, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
-        .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale);
+        .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
+        .setInteractive({ cursor: 'pointer' });
         this._scene.add.existing(this._topArrow);
 
         
@@ -31,7 +36,8 @@ export default class Controller{
         .image(innerWidth / 2, innerHeight - offset, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
-        .setRotation(Phaser.Math.DegToRad(180));
+        .setRotation(Phaser.Math.DegToRad(180))
+        .setInteractive({ cursor: 'pointer' });
         this._scene.add.existing(this._bottomArrow);
 
         
@@ -40,7 +46,8 @@ export default class Controller{
         .image(offset, innerHeight / 2, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
-        .setRotation(Phaser.Math.DegToRad(-90));
+        .setRotation(Phaser.Math.DegToRad(-90))
+        .setInteractive({ cursor: 'pointer' });
         this._scene.add.existing(this._leftArrow);
 
 
@@ -49,10 +56,28 @@ export default class Controller{
         .image(innerWidth - offset, innerHeight / 2, Configs.arrow.texture)
         .setScrollFactor(Configs.arrow.scrollfactor.x, Configs.arrow.scrollfactor.y)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale)
-        .setRotation(Phaser.Math.DegToRad(90));
+        .setRotation(Phaser.Math.DegToRad(90))
+        .setInteractive({ cursor: 'pointer' });
         this._scene.add.existing(this._rightArrow);
     }
 
+    private _addEvents(): void{
+        this._rightArrow.on('pointerdown', () => {
+           this._arrowClickCallback(50, 0);
+        }, this);
+
+        this._leftArrow.on('pointerdown', () => {
+            this._arrowClickCallback(-50, 0);
+         }, this);
+
+         this._topArrow.on('pointerdown', () => {
+            this._arrowClickCallback(0, -50);
+         }, this);
+
+         this._bottomArrow.on('pointerdown', () => {
+            this._arrowClickCallback(0, 50);
+         }, this);
+    }
 
     public onScreenChange(): void{
         const width: number = (innerWidth / 1024);
@@ -79,4 +104,5 @@ export default class Controller{
         .setPosition(innerWidth / 2, innerHeight - offset)
         .setDisplaySize(Configs.arrow.width * scale, Configs.arrow.height * scale);
     }
+    
 }

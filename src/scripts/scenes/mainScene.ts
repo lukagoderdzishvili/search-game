@@ -22,7 +22,7 @@ export default class MainScene extends Phaser.Scene{
         this._addBackground();
         this._levelContainer = new Level(this);
         this._avatarContainer = new Avatar(this);
-        this._controller = new Controller(this);
+        this._controller = new Controller(this, this._controllerCallback);
         
         // Define the specific point on the original background size
         const originalPoint = new Phaser.Math.Vector2(4945 / 2.5, 2781 / 2.5);
@@ -30,7 +30,7 @@ export default class MainScene extends Phaser.Scene{
         // Convert the point to the scaled background size
         const scaledPoint = new Phaser.Math.Vector2(originalPoint.x * this._background.scaleX, originalPoint.y * this._background.scaleY);
 
-        this.cameras.main.pan(scaledPoint.x, scaledPoint.y, 1000);
+        this.cameras.main.pan(scaledPoint.x, scaledPoint.y, 1000, 'Power2');
 
         // Set camera bounds to match the scaled background size
         this.cameras.main.setBounds(0, 0, this._background.width * this._background.scaleX, this._background.height * this._background.scaleY);
@@ -47,6 +47,16 @@ export default class MainScene extends Phaser.Scene{
         .setScale(scale);
     }
 
+    private _controllerCallback = (x: number, y: number): void => {
+ 
+        // Pan the camera to the new position
+        this.cameras.main.scrollX += x;
+        this.cameras.main.scrollY += y;
+    
+        // Set camera bounds to match the scaled background size
+        this.cameras.main.setBounds(0, 0, this._background.width * this._background.scaleX, this._background.height * this._background.scaleY);
+    }
+    
     private _resizeBackground(): void{
         if(!this._background) return;
 
