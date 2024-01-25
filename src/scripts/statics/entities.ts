@@ -20,3 +20,11 @@ export interface AvatarConfig{
     origin: Phaser.Math.Vector2;
     scrollfactor: Phaser.Math.Vector2;
 }
+
+export interface ArrowConfig{
+    width: number;
+    height: number;
+    texture: string;
+    scrollfactor: Phaser.Math.Vector2;
+
+}

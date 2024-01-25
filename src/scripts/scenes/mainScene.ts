@@ -1,4 +1,5 @@
 import Avatar from "../game_objects/avatar";
+import Controller from "../game_objects/controller";
 import Level from "../game_objects/level";
 import Configs from "../statics/configs";
 
@@ -6,6 +7,8 @@ export default class MainScene extends Phaser.Scene{
     private _background!: Phaser.GameObjects.Image;
     private _levelContainer!: Level;
     private _avatarContainer!: Avatar;
+
+    private _controller!: Controller;
 
 
     private _currentLevel: number = 1;
@@ -19,6 +22,7 @@ export default class MainScene extends Phaser.Scene{
         this._addBackground();
         this._levelContainer = new Level(this);
         this._avatarContainer = new Avatar(this);
+        this._controller = new Controller(this);
         
         // Define the specific point on the original background size
         const originalPoint = new Phaser.Math.Vector2(4945 / 2.5, 2781 / 2.5);
@@ -62,9 +66,7 @@ export default class MainScene extends Phaser.Scene{
         console.log('resize event');
         this._resizeBackground();
         this._levelContainer?.onScreenChange();
-        this._avatarContainer?.onScreenChange();
-        
-     //   this.cameras.main.pan(0, 0);
-        
+        this._avatarContainer?.onScreenChange();       
+        this._controller?.onScreenChange(); 
     }
 }

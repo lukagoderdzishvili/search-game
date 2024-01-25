@@ -1,4 +1,4 @@
-import { AvatarConfig, BackgroundConfig, LevelBackgroundConfig } from "./entities";
+import { ArrowConfig, AvatarConfig, BackgroundConfig, LevelBackgroundConfig } from "./entities";
 
 export default class Configs{
     static gameConfig: Phaser.Types.Core.GameConfig = {
@@ -67,5 +67,12 @@ export default class Configs{
         width: 4945,
         height: 2781,
         texture: 'background'
+    }
+
+    static arrow: ArrowConfig = {
+        width: 195,
+        height: 133,
+        texture: 'arrow',
+        scrollfactor: new Phaser.Math.Vector2(0, 0)
     }
 }
