@@ -1,3 +1,5 @@
+import { AvatarConfig, BackgroundConfig, LevelBackgroundConfig } from "./entities";
+
 export default class Configs{
     static gameConfig: Phaser.Types.Core.GameConfig = {
         title: 'Search Game',
@@ -42,4 +44,28 @@ export default class Configs{
         //}         
     };
 
+
+
+    static levelContainer: LevelBackgroundConfig = {
+        width: 463,
+        height: 191,
+        texture: 'level',
+        origin: new Phaser.Math.Vector2(0, 1),
+        scrollfactor: new Phaser.Math.Vector2(0, 0)
+    }
+
+    static avatar: AvatarConfig = {
+        width: 240,
+        height: 240,
+        texture: 'avatar',
+        origin: new Phaser.Math.Vector2(1, 1),
+        scrollfactor: new Phaser.Math.Vector2(0, 0)
+    }
+    
+
+    static background: BackgroundConfig = {
+        width: 4945,
+        height: 2781,
+        texture: 'background'
+    }
 }
