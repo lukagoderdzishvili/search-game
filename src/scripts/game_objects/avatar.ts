@@ -37,7 +37,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
         const scale: number = Math.min(width, height);
         
         this._background
-        .setPosition(innerWidth - 50 * scale, innerHeight - 50 * scale)
+        .setPosition(innerWidth - 30 * scale, innerHeight - 30 * scale)
         .setDisplaySize(
             this._config.width * scale,
             this._config.height * scale
