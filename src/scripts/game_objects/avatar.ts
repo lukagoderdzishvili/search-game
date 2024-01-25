@@ -55,12 +55,20 @@ export default class Avatar extends Phaser.GameObjects.Container{
             },
 
             onComplete: () => {
-                this._text = this._scene.add.text(-400, -this._background.height * 2, 'MISSION TEXT', { color: '#000000', fontSize: 40}).setResolution(100);
+                this._text = this._scene.add.text(-400, -this._background.height * 2, 'MISSION STARTED!', { color: '#000000', fontSize: 40}).setResolution(100);
                 this._text.x -= this._text.displayWidth / 2;
                 this.add(this._text)
         
             }
         });
+    }
+
+    public changeText(text: string): void{
+        if(this._text)this._text.destroy();
+        this._text = this._scene.add.text(-400, -this._background.height * 2, text, { color: '#000000', fontSize: 40}).setResolution(100);
+        this._text.x -= this._text.displayWidth / 2;
+        this.add(this._text)
+        console.log(this._text.text)
     }
 
     public onScreenChange(): void{

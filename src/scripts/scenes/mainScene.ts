@@ -16,6 +16,14 @@ export default class MainScene extends Phaser.Scene{
     private _croissant!: Phaser.GameObjects.Image;
     private _croissant_key!: Phaser.GameObjects.Image;
 
+    
+    private _dog_bone!: Phaser.GameObjects.Image;
+    private _dog_bone_key!: Phaser.GameObjects.Image;
+
+    
+    private _tnt!: Phaser.GameObjects.Image;
+    private _tnt_key!: Phaser.GameObjects.Image;
+
     constructor(){
         super({ key: 'MainScene' });
     }
@@ -24,7 +32,8 @@ export default class MainScene extends Phaser.Scene{
     public create(): void{
         this._addBackground();
         this._drawCroissant();
-
+        this._drawDogBone();
+        this._drawTnt();
        
         this._levelContainer = new Level(this);
         this._avatarContainer = new Avatar(this);
@@ -54,7 +63,6 @@ export default class MainScene extends Phaser.Scene{
         .setScale(this._background.scale)
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (_pointer: any, dragX: any, dragY: any) => {
-            // Update the position of _test2 during drag
             if(
                 2000 * this._background.scaleX - this._croissant.displayWidth <= dragX &&
                 2000 * this._background.scaleX + this._croissant.displayWidth >= dragX && 
@@ -63,6 +71,7 @@ export default class MainScene extends Phaser.Scene{
             ){
                 this._croissant.destroy();
                 this._croissant_key.destroy();
+                this._checkLevelComplete();
             }
       
 
@@ -71,7 +80,70 @@ export default class MainScene extends Phaser.Scene{
         });
     }
 
+    private _drawDogBone(): void{
+        this._dog_bone = this.add.image(1685 * this._background.scaleX, 2170 * this._background.scaleY, 'dog_bone_2')
+        .setScale(this._background.scale);
+
+        this._dog_bone_key = this.add
+        .image(2035 * this._background.scaleX, 1460 * this._background.scaleY, 'dog_bone_1')
+        .setScale(this._background.scale)
+        .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
+        .on('drag', (_pointer: any, dragX: any, dragY: any) => {
+            if(
+                1685 * this._background.scaleX - this._dog_bone.displayWidth <= dragX &&
+                1685 * this._background.scaleX + this._dog_bone.displayWidth >= dragX && 
+                2170 * this._background.scaleY - this._dog_bone.displayHeight <= dragY &&
+                2170 * this._background.scaleY + this._dog_bone.displayHeight >= dragY  
+            ){
+                this._dog_bone.destroy();
+                this._dog_bone_key.destroy();
+                this._checkLevelComplete();
+            }
+      
+
+            this._dog_bone_key.x = dragX;
+            this._dog_bone_key.y = dragY;
+        });
+    }
+
+
+    private _drawTnt(): void{
+        this._tnt = this.add.image(2475 * this._background.scaleX, 2190 * this._background.scaleY, 'tnt_2')
+        .setScale(this._background.scale);
+
+        this._tnt_key = this.add
+        .image(1475 * this._background.scaleX, 2235 * this._background.scaleY, 'tnt_1')
+        .setScale(this._background.scale)
+        .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
+        .on('drag', (_pointer: any, dragX: any, dragY: any) => {
+            if(
+                2475 * this._background.scaleX - this._tnt.displayWidth <= dragX &&
+                2475 * this._background.scaleX + this._tnt.displayWidth >= dragX && 
+                2190 * this._background.scaleY - this._tnt.displayHeight <= dragY &&
+                2190 * this._background.scaleY + this._tnt.displayHeight >= dragY  
+            ){
+                this._tnt.destroy();
+                this._tnt_key.destroy();
+                this._checkLevelComplete();
+            }
+      
+
+            this._tnt_key.x = dragX;
+            this._tnt_key.y = dragY;
+        });
+    }
     
+    private _checkLevelComplete(): void{
+        
+        if(this._currentLevel === 1){
+            if(this._croissant.active || this._tnt.active || this._dog_bone.active)return;
+
+            this._currentLevel = 2;
+            this._levelContainer.changeLevelText('2');
+            this._avatarContainer.changeText('MISSION COMPLETED!')
+        }
+    }
+
     private _addBackground(): void{
         const width: number = (innerWidth / 1024);
         const height: number = (innerHeight / 2000)
@@ -107,6 +179,14 @@ export default class MainScene extends Phaser.Scene{
 
         this._croissant?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(scale);  
         this._croissant_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
+
+
+        this._dog_bone?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(scale);  
+        this._dog_bone_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
+
+        this._tnt?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(scale);  
+        this._tnt_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
+
 
     }
 
