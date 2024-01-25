@@ -34,6 +34,7 @@ export default class MainScene extends Phaser.Scene{
 
         // Set camera bounds to match the scaled background size
         this.cameras.main.setBounds(0, 0, this._background.width * this._background.scaleX, this._background.height * this._background.scaleY);
+   
     }
 
 

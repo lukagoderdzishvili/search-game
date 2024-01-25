@@ -4,11 +4,12 @@ import { LevelBackgroundConfig } from "../statics/entities";
 export default class Level extends Phaser.GameObjects.Container{
     private _scene: Phaser.Scene;
     private _background!: Phaser.GameObjects.Image;
+    private _text!: Phaser.GameObjects.Text;
     private _config: LevelBackgroundConfig;
 
 
     constructor(scene: Phaser.Scene){
-        super(scene, 0, 0);
+        super(scene, 0, innerHeight);
         this._scene = scene;
         this._config = Configs.levelContainer;
 
@@ -21,26 +22,35 @@ export default class Level extends Phaser.GameObjects.Container{
 
     private _create(): void{
         this._background = this._scene.add
-        .image(0, innerHeight, this._config.texture)
+        .image(0, 0, this._config.texture)
         .setOrigin(this._config.origin.x, this._config.origin.y)
         .setDisplaySize(
-            this._config.width * (innerWidth / 1024),
-            this._config.height * (innerHeight / 2000)
+            this._config.width,
+            this._config.height
         );
 
         this.add(this._background);
+
+
+        this._text = this._scene.add.text(this._config.width / 2 - 10, -25, '1', { color: '#ffffff', fontSize: 75}).setScale(2)
+        .setOrigin(this._config.origin.x, this._config.origin.y).setResolution(10);
+        this._text.x -= this._text.displayWidth / 2;
+
+
+        this.add(this._text);
+    }
+
+
+    public changeLevelText(newLevel: string): void{
+        this._text.setText(newLevel);
     }
 
     public onScreenChange(): void{
         const width: number = (innerWidth / 1024);
         const height: number = (innerHeight / 2000)
         const scale: number = Math.min(width, height);
-        
-        this._background
-        .setPosition(0, innerHeight)
-        .setDisplaySize(
-            this._config.width * scale,
-            this._config.height * scale
-        );
+ 
+        this.setPosition(0, innerHeight + 5 * scale);
+        this.setScale(scale)
     }
 }
