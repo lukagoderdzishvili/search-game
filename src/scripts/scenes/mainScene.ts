@@ -2,7 +2,10 @@ import Avatar from "../game_objects/avatar";
 import Controller from "../game_objects/controller";
 import Level from "../game_objects/level";
 import Configs from "../statics/configs";
-
+interface CustomInputPlugin extends Phaser.Input.InputPlugin {
+    initialX?: number;
+    initialY?: number;
+}
 export default class MainScene extends Phaser.Scene{
     private _background!: Phaser.GameObjects.Image;
     private _levelContainer!: Level;
@@ -51,6 +54,28 @@ export default class MainScene extends Phaser.Scene{
         this.cameras.main.setBounds(0, 0, this._background.width * this._background.scaleX, this._background.height * this._background.scaleY);
    
 
+        // Enable swipe/pan for the background image
+        const customInput = this.input as CustomInputPlugin;
+
+        // Enable swipe/pan for the background image
+         this.input.on('pointerdown', (pointer: any) => {
+            // Store the initial pointer position for calculating the swipe distance
+            customInput.initialX = pointer.x;
+            customInput.initialY = pointer.y;
+        });
+
+        this.input.on('pointerup', (pointer: any) => {
+            // Calculate the swipe distance
+            const deltaX = pointer.x - customInput.initialX!;
+            const deltaY = pointer.y - customInput.initialY!;
+
+            // Adjust the camera position based on the swipe distance
+            this.cameras.main.scrollX -= deltaX;
+            this.cameras.main.scrollY -= deltaY;
+
+            // Set camera bounds to match the scaled background size
+            this.cameras.main.setBounds(0, 0, this._background.width * this._background.scaleX, this._background.height * this._background.scaleY);
+        });
 
     }
 

@@ -55,7 +55,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
             },
 
             onComplete: () => {
-                this._text = this._scene.add.text(-400, -this._background.height * 2, 'MISSION STARTED!', { color: '#000000', fontSize: 40}).setResolution(100);
+                this._text = this._scene.add.text(-430, -this._background.height * 2, ['Distract the guards', 'and escape', 'using dynamite'], { color: '#000000', fontSize: 40, align: 'center'}).setResolution(100);
                 this._text.x -= this._text.displayWidth / 2;
                 this.add(this._text)
         
