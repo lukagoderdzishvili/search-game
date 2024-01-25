@@ -1,0 +1,66 @@
+{
+    "section1": {
+        "files": [
+            {
+                "url": "assets/background.png",
+                "type": "image",
+                "key": "background"
+            },
+            {
+                "url": "assets/arrow.png",
+                "type": "image",
+                "key": "arrow"
+            },
+            {
+                "url": "assets/arrow.png",
+                "type": "image",
+                "key": "arrow"
+            },
+            {
+                "url": "assets/dog_bone_1.png",
+                "type": "image",
+                "key": "dog_bone_1"
+            },
+            {
+                "url": "assets/dog_bone_2.png",
+                "type": "image",
+                "key": "dog_bone_2"
+            },
+            {
+                "url": "assets/croissant_1.png",
+                "type": "image",
+                "key": "croissant_1"
+            },
+            {
+                "url": "assets/croissant_2.png",
+                "type": "image",
+                "key": "croissant_2"
+            },
+            {
+                "url": "assets/tnt_1.png",
+                "type": "image",
+                "key": "tnt_1"
+            },
+            {
+                "url": "assets/tnt_2.png",
+                "type": "image",
+                "key": "tnt_2"
+            },
+            {
+                "url": "assets/level.png",
+                "type": "image",
+                "key": "level"
+            },
+            {
+                "url": "assets/dialog.png",
+                "type": "image",
+                "key": "dialog"
+            },
+            {
+                "url": "assets/avatar.png",
+                "type": "image",
+                "key": "avatar"
+            }
+        ]
+    }
+}
