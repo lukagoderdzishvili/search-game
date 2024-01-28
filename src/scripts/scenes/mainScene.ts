@@ -28,6 +28,8 @@ export default class MainScene extends Phaser.Scene{
     private _tnt!: Phaser.GameObjects.Image;
     private _tnt_key!: Phaser.GameObjects.Image;
 
+    private _isDraggingKey: boolean = false;
+
     constructor(){
         super({ key: 'MainScene' });
     }
@@ -68,7 +70,7 @@ export default class MainScene extends Phaser.Scene{
 
         this.input.on('pointermove', (pointer: any) => {
             // Calculate the swipe distance
-            if(!pointer.isDown)return;
+            if(!pointer.isDown || this._isDraggingKey)return;
             const deltaX = pointer.x - customInput.initialX!;
             const deltaY = pointer.y - customInput.initialY!;
             
@@ -94,6 +96,7 @@ export default class MainScene extends Phaser.Scene{
         .setScale(this._background.scale)
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (_pointer: any, dragX: any, dragY: any) => {
+            this._isDraggingKey = true;
             if(
                 2000 * this._background.scaleX - this._croissant.displayWidth <= dragX &&
                 2000 * this._background.scaleX + this._croissant.displayWidth >= dragX && 
@@ -108,6 +111,8 @@ export default class MainScene extends Phaser.Scene{
 
             this._croissant_key.x = dragX;
             this._croissant_key.y = dragY;
+        }).on('dragend', (_pointer: any) => {
+            this._isDraggingKey = false;
         });
     }
 
@@ -120,6 +125,7 @@ export default class MainScene extends Phaser.Scene{
         .setScale(this._background.scale)
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (_pointer: any, dragX: any, dragY: any) => {
+            this._isDraggingKey = true;
             if(
                 1685 * this._background.scaleX - this._dog_bone.displayWidth <= dragX &&
                 1685 * this._background.scaleX + this._dog_bone.displayWidth >= dragX && 
@@ -134,7 +140,10 @@ export default class MainScene extends Phaser.Scene{
 
             this._dog_bone_key.x = dragX;
             this._dog_bone_key.y = dragY;
+        }).on('dragend', (_pointer: any) => {
+            this._isDraggingKey = false;
         });
+        
     }
 
 
@@ -147,6 +156,7 @@ export default class MainScene extends Phaser.Scene{
         .setScale(this._background.scale)
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (_pointer: any, dragX: any, dragY: any) => {
+            this._isDraggingKey = true;
             if(
                 2475 * this._background.scaleX - this._tnt.displayWidth <= dragX &&
                 2475 * this._background.scaleX + this._tnt.displayWidth >= dragX && 
@@ -161,6 +171,8 @@ export default class MainScene extends Phaser.Scene{
 
             this._tnt_key.x = dragX;
             this._tnt_key.y = dragY;
+        }).on('dragend', (_pointer: any) => {
+            this._isDraggingKey = false;
         });
     }
     
@@ -168,10 +180,10 @@ export default class MainScene extends Phaser.Scene{
         
         if(this._currentLevel === 1){
             if(this._croissant.active || this._tnt.active || this._dog_bone.active)return;
-
+            this._isDraggingKey = false;
             this._currentLevel = 2;
-            this._collectedContainer.changeLevelText('2');
-            this._avatarContainer.changeText('MISSION COMPLETED!')
+          //  this._collectedContainer.changeLevelText('2');
+           this._avatarContainer.changeText('MISSION COMPLETED!')
         }
     }
 
