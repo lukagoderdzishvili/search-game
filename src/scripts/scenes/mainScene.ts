@@ -1,14 +1,15 @@
 import Avatar from "../game_objects/avatar";
 import Controller from "../game_objects/controller";
-import Level from "../game_objects/level";
 import Configs from "../statics/configs";
+import Box from "../game_objects/box";
+
 interface CustomInputPlugin extends Phaser.Input.InputPlugin {
     initialX?: number;
     initialY?: number;
 }
 export default class MainScene extends Phaser.Scene{
     private _background!: Phaser.GameObjects.Image;
-    private _levelContainer!: Level;
+    private _collectedContainer!: Box;
     private _avatarContainer!: Avatar;
 
     private _controller!: Controller;
@@ -38,7 +39,7 @@ export default class MainScene extends Phaser.Scene{
         this._drawDogBone();
         this._drawTnt();
        
-        this._levelContainer = new Level(this);
+        this._collectedContainer = new Box(this);
         this._avatarContainer = new Avatar(this);
         this._controller = new Controller(this, this._controllerCallback);
         
@@ -62,12 +63,17 @@ export default class MainScene extends Phaser.Scene{
             // Store the initial pointer position for calculating the swipe distance
             customInput.initialX = pointer.x;
             customInput.initialY = pointer.y;
+            
         });
 
-        this.input.on('pointerup', (pointer: any) => {
+        this.input.on('pointermove', (pointer: any) => {
             // Calculate the swipe distance
+            if(!pointer.isDown)return;
             const deltaX = pointer.x - customInput.initialX!;
             const deltaY = pointer.y - customInput.initialY!;
+            
+            customInput.initialX = pointer.x;
+            customInput.initialY = pointer.y;
 
             // Adjust the camera position based on the swipe distance
             this.cameras.main.scrollX -= deltaX;
@@ -164,7 +170,7 @@ export default class MainScene extends Phaser.Scene{
             if(this._croissant.active || this._tnt.active || this._dog_bone.active)return;
 
             this._currentLevel = 2;
-            this._levelContainer.changeLevelText('2');
+            this._collectedContainer.changeLevelText('2');
             this._avatarContainer.changeText('MISSION COMPLETED!')
         }
     }
@@ -220,7 +226,7 @@ export default class MainScene extends Phaser.Scene{
     public onScreenChange(): void{
         console.log('resize event');
         this._resizeBackground();
-        this._levelContainer?.onScreenChange();
+        this._collectedContainer?.onScreenChange();
         this._avatarContainer?.onScreenChange();       
         this._controller?.onScreenChange(); 
         this._controllerCallback(0, 0);

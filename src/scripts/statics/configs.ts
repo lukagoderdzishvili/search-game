@@ -1,4 +1,4 @@
-import { ArrowConfig, AvatarConfig, BackgroundConfig, LevelBackgroundConfig } from "./entities";
+import { ArrowConfig, AvatarConfig, BackgroundConfig, BoxConfig } from "./entities";
 
 export default class Configs{
     static gameConfig: Phaser.Types.Core.GameConfig = {
@@ -46,7 +46,7 @@ export default class Configs{
 
 
 
-    static levelContainer: LevelBackgroundConfig = {
+    static collectedContainer: BoxConfig = {
         width: 463,
         height: 191,
         texture: 'level',

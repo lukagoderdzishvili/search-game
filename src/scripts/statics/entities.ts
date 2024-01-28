@@ -1,4 +1,4 @@
-export interface LevelBackgroundConfig {
+export interface BoxConfig {
     width: number;
     height: number;
     texture: string;
