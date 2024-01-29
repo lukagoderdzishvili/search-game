@@ -34,6 +34,9 @@ export default class MainScene extends Phaser.Scene{
 
     private _customInput!: CustomInputPlugin;
 
+    private _pointerImage!: Phaser.GameObjects.Image;
+    private _scale: number = Math.min(innerWidth / 1024, innerHeight / 2000);
+
     constructor(){
         super({ key: 'MainScene' });
     }
@@ -93,6 +96,13 @@ export default class MainScene extends Phaser.Scene{
             this.cameras.main.setBounds(0, 0, this._background.width * this._background.scaleX, this._background.height * this._background.scaleY);
         });
 
+        this._pointerImage = this.add
+        .image(0, 0, 'pointer')
+        .setAlpha(0)
+        .setScrollFactor(0, 0)
+        .setDepth(1000)
+        .setDisplaySize(102 * this._scale, 77 * this._scale);
+
     }
 
     private _drawCroissant(): void{
@@ -102,10 +112,13 @@ export default class MainScene extends Phaser.Scene{
         this._croissant_key = this.physics.add
         .image(2820 * this._background.scaleX, 1940 * this._background.scaleY, 'croissant_1')
         .setScale(this._background.scale)
+        .setData('name', 'croissant')
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            this._pointerImage.setPosition(pointer.x + this._pointerImage.displayWidth / 4, pointer.y + this._pointerImage.displayHeight / 4).setAlpha(1);
+
             if(this._croissant_key.getData('collected')){
-                this._croissant_key.setOffset(this.cameras.main.scrollX * 2, this.cameras.main.scrollY * 2);
+                this._croissant_key.setOffset(this.cameras.main.scrollX * (1 / this._scale), this.cameras.main.scrollY * (1 / this._scale));
             }else{
                 this._croissant_key.setOffset(0, 0);
             }
@@ -118,13 +131,15 @@ export default class MainScene extends Phaser.Scene{
             
 
         }).on('dragend', (_pointer: any) => {
-
+            this._pointerImage.setAlpha(0);
             this._isDraggingKey = false;
             this._collectedContainer.addItem(this._croissant_key);
         });
 
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._croissant, this._croissant_key, () => {
             if(!this._isDraggingKey)return;
+            this._pointerImage.setAlpha(0);
+            this._collectedContainer.removeItem(this._croissant_key);
             this._croissant.destroy();
             this._croissant_key.destroy();
             this._checkLevelComplete();
@@ -139,10 +154,13 @@ export default class MainScene extends Phaser.Scene{
         this._dog_bone_key = this.physics.add
         .image(2035 * this._background.scaleX, 1460 * this._background.scaleY, 'dog_bone_1')
         .setScale(this._background.scale)
+        .setData('name', 'bone')
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            this._pointerImage.setPosition(pointer.x + this._pointerImage.displayWidth / 4, pointer.y + this._pointerImage.displayHeight / 4).setAlpha(1);
+
             if(this._dog_bone_key.getData('collected')){
-                this._dog_bone_key.setOffset(this.cameras.main.scrollX * 2, this.cameras.main.scrollY * 2);
+                this._dog_bone_key.setOffset(this.cameras.main.scrollX * (1 / this._scale), this.cameras.main.scrollY * (1 / this._scale));
             }else{
                 this._dog_bone_key.setOffset(0, 0);
             }
@@ -155,6 +173,7 @@ export default class MainScene extends Phaser.Scene{
             this._dog_bone_key.x = dragX;
             this._dog_bone_key.y = dragY;
         }).on('dragend', (_pointer: any) => {
+            this._pointerImage.setAlpha(0);
             this._isDraggingKey = false;
             this._collectedContainer.addItem(this._dog_bone_key);
             
@@ -162,6 +181,8 @@ export default class MainScene extends Phaser.Scene{
 
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._dog_bone, this._dog_bone_key, () => {
             if(!this._isDraggingKey)return;
+            this._pointerImage.setAlpha(0);
+            this._collectedContainer.removeItem(this._dog_bone_key);
             this._dog_bone.destroy();
             this._dog_bone_key.destroy();
             this._checkLevelComplete();
@@ -178,10 +199,13 @@ export default class MainScene extends Phaser.Scene{
         this._tnt_key = this.physics.add
         .image(1475 * this._background.scaleX, 2235 * this._background.scaleY, 'tnt_1')
         .setScale(this._background.scale)
+        .setData('name', 'tnt')
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            this._pointerImage.setPosition(pointer.x + this._pointerImage.displayWidth / 4, pointer.y + this._pointerImage.displayHeight / 4).setAlpha(1);
+
             if(this._tnt_key.getData('collected')){
-                this._tnt_key.setOffset(this.cameras.main.scrollX * 2, this.cameras.main.scrollY * 2);
+                this._tnt_key.setOffset(this.cameras.main.scrollX * (1 / this._scale), this.cameras.main.scrollY * (1 / this._scale));
             }else{
                 this._tnt_key.setOffset(0, 0);
             }
@@ -195,6 +219,7 @@ export default class MainScene extends Phaser.Scene{
             this._tnt_key.x = dragX;
             this._tnt_key.y = dragY;
         }).on('dragend', (_pointer: any) => {
+            this._pointerImage.setAlpha(0);
             this._isDraggingKey = false;
             this._collectedContainer.addItem(this._tnt_key);
         });
@@ -202,6 +227,8 @@ export default class MainScene extends Phaser.Scene{
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._tnt, this._tnt_key, () => {
             console.log('tnt');
             if(!this._isDraggingKey)return;
+            this._collectedContainer.removeItem(this._tnt_key);
+            this._pointerImage.setAlpha(0);
             this._tnt.destroy();
             this._tnt_key.destroy();
             this._checkLevelComplete();
@@ -220,13 +247,10 @@ export default class MainScene extends Phaser.Scene{
     }
 
     private _addBackground(): void{
-        const width: number = (innerWidth / 1024);
-        const height: number = (innerHeight / 2000)
-        const scale: number = Math.min(width, height);
         this._background = this.add
         .image(0, 0, Configs.background.texture)
         .setOrigin(0, 0)
-        .setScale(scale);
+        .setScale(this._scale);
     }
 
     private _controllerCallback = (x: number, y: number): void => {
@@ -242,31 +266,28 @@ export default class MainScene extends Phaser.Scene{
     private _resizeBackground(): void{
         if(!this._background) return;
 
-        const width: number = (innerWidth / 1024);
-        const height: number = (innerHeight / 2000);
-        const scale: number = Math.min(width, height);
         this._background
         ?.setPosition(0, 0)
-        ?.setScale(scale);
+        ?.setScale(this._scale);
 
         // Update camera bounds on resize
         this.cameras.main.setBounds(0, 0, this._background.width, this._background.height);
 
-        this._croissant?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(scale);  
+        this._croissant?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(this._scale);  
         if(!Boolean(this._croissant_key.getData('collected'))){
             this._croissant_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
         }else{
             this._croissant_key?.setScale(this._background.scale);
         }
 
-        this._dog_bone?.setPosition(1685 * this._background.scaleX, 2170 * this._background.scaleY).setScale(scale);  
+        this._dog_bone?.setPosition(1685 * this._background.scaleX, 2170 * this._background.scaleY).setScale(this._scale);  
         if(!Boolean(this._dog_bone_key.getData('collected'))){
             this._dog_bone_key?.setPosition(2035 * this._background.scaleX, 1460 * this._background.scaleY).setScale(this._background.scale);
         }else{
             this._dog_bone_key?.setScale(this._background.scale);
         }
 
-        this._tnt?.setPosition(2475 * this._background.scaleX, 2190 * this._background.scaleY).setScale(scale);  
+        this._tnt?.setPosition(2475 * this._background.scaleX, 2190 * this._background.scaleY).setScale(this._scale);  
         if(!Boolean(this._tnt_key.getData('collected'))){
             this._tnt_key?.setPosition(1475 * this._background.scaleX, 2235 * this._background.scaleY).setScale(this._background.scale);
         }else{
@@ -277,6 +298,7 @@ export default class MainScene extends Phaser.Scene{
 
 
     public onScreenChange(): void{
+        this._scale = Math.min(innerWidth / 1024, innerHeight / 2000);
         console.log('resize event');
         this._resizeBackground();
         this._collectedContainer?.onScreenChange();

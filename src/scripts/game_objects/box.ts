@@ -33,7 +33,10 @@ export default class Box extends Phaser.GameObjects.Container{
 
         this.add(this._background);
 
+        this._addText();
+    }
 
+    private _addText(): void{
         this._text = this._scene.add.text(
             this._background.displayWidth / 2,
             -this._background.displayHeight / 2,
@@ -49,17 +52,20 @@ export default class Box extends Phaser.GameObjects.Container{
 
 
     public addItem(item: Phaser.Physics.Arcade.Image): void{
+        this._text?.destroy();
         item.setData('collected', true);
-        this._collected.push(item);
+        if(this._collected.findIndex(object => object.getData('name') === item.getData('name')) === -1){
+            this._collected.push(item);
+        }
 
-
+        
         this._scene.add.tween({
 
             targets: item,
             
             scrollFactorX: 0,
             scrollFactorY: 0,
-            x: this._background.getBounds().left + ((100 * this._collected.length) * this._scale),
+            x: this._background.getBounds().left + (100 * (this._collected.findIndex(object => object.getData('name') === item.getData('name')) + 1) * this._scale),
             y: this._background.getBounds().centerY,
             duration: 300,
 
@@ -70,6 +76,10 @@ export default class Box extends Phaser.GameObjects.Container{
         });
     }
 
+    public removeItem(item: Phaser.Physics.Arcade.Image): void{
+        this._collected.filter(object => object.getData('name') !== item.getData('name'));
+    }
+
     public onScreenChange(): void{
         this._scale = Math.min(innerWidth / 1024, innerHeight / 2000);
         console.log(this._scale);
@@ -78,7 +88,7 @@ export default class Box extends Phaser.GameObjects.Container{
             this._config.height * this._scale
         );
 
-        if(this._text){
+        if(this._text?.active){
             this._text.setFontSize( 100 * this._scale);
             this._text.setPosition(this._background.displayWidth / 2, -this._background.displayHeight / 2);
             this._text.x -= this._text.displayWidth / 2 + 20 * this._scale;

@@ -60,6 +60,12 @@
                 "url": "assets/avatar.png",
                 "type": "image",
                 "key": "avatar"
+            },
+
+            {
+                "url": "assets/pointer.png",
+                "type": "image",
+                "key": "pointer"
             }
         ]
     }
