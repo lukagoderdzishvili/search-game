@@ -7,6 +7,7 @@ export default class Box extends Phaser.GameObjects.Container{
     private _text!: Phaser.GameObjects.Text;
     private _config: BoxConfig;
     private _scale: number = Math.min(innerWidth / 1024, innerHeight / 2000);
+    private _collected: Phaser.Physics.Arcade.Image[] = [];
 
 
     constructor(scene: Phaser.Scene){
@@ -46,8 +47,49 @@ export default class Box extends Phaser.GameObjects.Container{
         this.add(this._text);
     }
 
+
+    public addItem(item: Phaser.Physics.Arcade.Image): void{
+        item.setData('collected', true);
+        this._collected.push(item);
+
+
+        this._scene.add.tween({
+
+            targets: item,
+            
+            scrollFactorX: 0,
+            scrollFactorY: 0,
+            x: this._background.getBounds().left + ((100 * this._collected.length) * this._scale),
+            y: this._background.getBounds().centerY,
+            duration: 300,
+
+            onStart: () => {
+               
+                item.setDepth(this.depth + 1);
+            }
+        });
+    }
+
     public onScreenChange(): void{
         this._scale = Math.min(innerWidth / 1024, innerHeight / 2000);
+        console.log(this._scale);
+        this._background.setDisplaySize(
+            this._config.width * this._scale,
+            this._config.height * this._scale
+        );
+
+        if(this._text){
+            this._text.setFontSize( 100 * this._scale);
+            this._text.setPosition(this._background.displayWidth / 2, -this._background.displayHeight / 2);
+            this._text.x -= this._text.displayWidth / 2 + 20 * this._scale;
+            this._text.y -= this._text.displayHeight / 2;
+        }
+
         this.setPosition(0, innerHeight + 5 * this._scale);
+
+
+        this._collected.forEach((item, index) => {
+            item.setPosition(this._background.getBounds().left + ((100 * (index + 1)) * this._scale), this._background.getBounds().centerY)
+        })
     }
 }

@@ -6,6 +6,8 @@ import Box from "../game_objects/box";
 interface CustomInputPlugin extends Phaser.Input.InputPlugin {
     initialX?: number;
     initialY?: number;
+    lastX?: number;
+    lasyY: number;
 }
 export default class MainScene extends Phaser.Scene{
     private _background!: Phaser.GameObjects.Image;
@@ -17,18 +19,20 @@ export default class MainScene extends Phaser.Scene{
 
     private _currentLevel: number = 1;
 
-    private _croissant!: Phaser.GameObjects.Image;
-    private _croissant_key!: Phaser.GameObjects.Image;
+    private _croissant!: Phaser.Physics.Arcade.Image;
+    private _croissant_key!: Phaser.Physics.Arcade.Image;
 
     
-    private _dog_bone!: Phaser.GameObjects.Image;
-    private _dog_bone_key!: Phaser.GameObjects.Image;
+    private _dog_bone!: Phaser.Physics.Arcade.Image;
+    private _dog_bone_key!: Phaser.Physics.Arcade.Image;
 
     
-    private _tnt!: Phaser.GameObjects.Image;
-    private _tnt_key!: Phaser.GameObjects.Image;
+    private _tnt!: Phaser.Physics.Arcade.Image;
+    private _tnt_key!: Phaser.Physics.Arcade.Image;
 
     private _isDraggingKey: boolean = false;
+
+    private _customInput!: CustomInputPlugin;
 
     constructor(){
         super({ key: 'MainScene' });
@@ -58,24 +62,28 @@ export default class MainScene extends Phaser.Scene{
    
 
         // Enable swipe/pan for the background image
-        const customInput = this.input as CustomInputPlugin;
+        this._customInput = this.input as CustomInputPlugin;
 
         // Enable swipe/pan for the background image
          this.input.on('pointerdown', (pointer: any) => {
             // Store the initial pointer position for calculating the swipe distance
-            customInput.initialX = pointer.x;
-            customInput.initialY = pointer.y;
+            if(this._isDraggingKey){
+
+            }
+            this._customInput.initialX = pointer.x;
+            this._customInput.initialY = pointer.y;
             
         });
 
         this.input.on('pointermove', (pointer: any) => {
             // Calculate the swipe distance
             if(!pointer.isDown || this._isDraggingKey)return;
-            const deltaX = pointer.x - customInput.initialX!;
-            const deltaY = pointer.y - customInput.initialY!;
             
-            customInput.initialX = pointer.x;
-            customInput.initialY = pointer.y;
+            const deltaX = pointer.x - this._customInput.initialX!;
+            const deltaY = pointer.y - this._customInput.initialY!;
+            
+            this._customInput.initialX = pointer.x;
+            this._customInput.initialY = pointer.y;
 
             // Adjust the camera position based on the swipe distance
             this.cameras.main.scrollX -= deltaX;
@@ -88,99 +96,124 @@ export default class MainScene extends Phaser.Scene{
     }
 
     private _drawCroissant(): void{
-        this._croissant = this.add.image(2000 * this._background.scaleX, 840 * this._background.scaleY, 'croissant_2')
+        this._croissant = this.physics.add.image(2000 * this._background.scaleX, 840 * this._background.scaleY, 'croissant_2')
         .setScale(this._background.scale);
 
-        this._croissant_key = this.add
+        this._croissant_key = this.physics.add
         .image(2820 * this._background.scaleX, 1940 * this._background.scaleY, 'croissant_1')
         .setScale(this._background.scale)
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
-        .on('drag', (_pointer: any, dragX: any, dragY: any) => {
-            this._isDraggingKey = true;
-            if(
-                2000 * this._background.scaleX - this._croissant.displayWidth <= dragX &&
-                2000 * this._background.scaleX + this._croissant.displayWidth >= dragX && 
-                840 * this._background.scaleY - this._croissant.displayHeight <= dragY &&
-                840 * this._background.scaleY + this._croissant.displayHeight >= dragY  
-            ){
-                this._croissant.destroy();
-                this._croissant_key.destroy();
-                this._checkLevelComplete();
+        .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            if(this._croissant_key.getData('collected')){
+                this._croissant_key.setOffset(this.cameras.main.scrollX * 2, this.cameras.main.scrollY * 2);
+            }else{
+                this._croissant_key.setOffset(0, 0);
             }
-      
+            this._isDraggingKey = true;
+            this._customInput.initialX = pointer.x;
+            this._customInput.initialY = pointer.y;
 
             this._croissant_key.x = dragX;
             this._croissant_key.y = dragY;
+            
+
         }).on('dragend', (_pointer: any) => {
+
             this._isDraggingKey = false;
+            this._collectedContainer.addItem(this._croissant_key);
+        });
+
+        const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._croissant, this._croissant_key, () => {
+            if(!this._isDraggingKey)return;
+            this._croissant.destroy();
+            this._croissant_key.destroy();
+            this._checkLevelComplete();
+            collide.destroy();
         });
     }
 
     private _drawDogBone(): void{
-        this._dog_bone = this.add.image(1685 * this._background.scaleX, 2170 * this._background.scaleY, 'dog_bone_2')
+        this._dog_bone = this.physics.add.image(1685 * this._background.scaleX, 2170 * this._background.scaleY, 'dog_bone_2')
         .setScale(this._background.scale);
 
-        this._dog_bone_key = this.add
+        this._dog_bone_key = this.physics.add
         .image(2035 * this._background.scaleX, 1460 * this._background.scaleY, 'dog_bone_1')
         .setScale(this._background.scale)
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
-        .on('drag', (_pointer: any, dragX: any, dragY: any) => {
-            this._isDraggingKey = true;
-            if(
-                1685 * this._background.scaleX - this._dog_bone.displayWidth <= dragX &&
-                1685 * this._background.scaleX + this._dog_bone.displayWidth >= dragX && 
-                2170 * this._background.scaleY - this._dog_bone.displayHeight <= dragY &&
-                2170 * this._background.scaleY + this._dog_bone.displayHeight >= dragY  
-            ){
-                this._dog_bone.destroy();
-                this._dog_bone_key.destroy();
-                this._checkLevelComplete();
+        .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            if(this._dog_bone_key.getData('collected')){
+                this._dog_bone_key.setOffset(this.cameras.main.scrollX * 2, this.cameras.main.scrollY * 2);
+            }else{
+                this._dog_bone_key.setOffset(0, 0);
             }
+
+            this._isDraggingKey = true;
+            this._customInput.initialX = pointer.x;
+            this._customInput.initialY = pointer.y;
       
 
             this._dog_bone_key.x = dragX;
             this._dog_bone_key.y = dragY;
         }).on('dragend', (_pointer: any) => {
             this._isDraggingKey = false;
+            this._collectedContainer.addItem(this._dog_bone_key);
+            
+        });
+
+        const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._dog_bone, this._dog_bone_key, () => {
+            if(!this._isDraggingKey)return;
+            this._dog_bone.destroy();
+            this._dog_bone_key.destroy();
+            this._checkLevelComplete();
+            collide.destroy();
         });
         
     }
 
 
     private _drawTnt(): void{
-        this._tnt = this.add.image(2475 * this._background.scaleX, 2190 * this._background.scaleY, 'tnt_2')
+        this._tnt = this.physics.add.image(2475 * this._background.scaleX, 2190 * this._background.scaleY, 'tnt_2')
         .setScale(this._background.scale);
 
-        this._tnt_key = this.add
+        this._tnt_key = this.physics.add
         .image(1475 * this._background.scaleX, 2235 * this._background.scaleY, 'tnt_1')
         .setScale(this._background.scale)
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
-        .on('drag', (_pointer: any, dragX: any, dragY: any) => {
-            this._isDraggingKey = true;
-            if(
-                2475 * this._background.scaleX - this._tnt.displayWidth <= dragX &&
-                2475 * this._background.scaleX + this._tnt.displayWidth >= dragX && 
-                2190 * this._background.scaleY - this._tnt.displayHeight <= dragY &&
-                2190 * this._background.scaleY + this._tnt.displayHeight >= dragY  
-            ){
-                this._tnt.destroy();
-                this._tnt_key.destroy();
-                this._checkLevelComplete();
+        .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            if(this._tnt_key.getData('collected')){
+                this._tnt_key.setOffset(this.cameras.main.scrollX * 2, this.cameras.main.scrollY * 2);
+            }else{
+                this._tnt_key.setOffset(0, 0);
             }
+            this._isDraggingKey = true;
+     
+            this._customInput.initialX = pointer.x;
+            this._customInput.initialY = pointer.y;
+
       
 
             this._tnt_key.x = dragX;
             this._tnt_key.y = dragY;
         }).on('dragend', (_pointer: any) => {
             this._isDraggingKey = false;
+            this._collectedContainer.addItem(this._tnt_key);
+        });
+
+        const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._tnt, this._tnt_key, () => {
+            console.log('tnt');
+            if(!this._isDraggingKey)return;
+            this._tnt.destroy();
+            this._tnt_key.destroy();
+            this._checkLevelComplete();
+            collide.destroy();
         });
     }
     
     private _checkLevelComplete(): void{
         
+        this._isDraggingKey = false;
         if(this._currentLevel === 1){
             if(this._croissant.active || this._tnt.active || this._dog_bone.active)return;
-            this._isDraggingKey = false;
             this._currentLevel = 2;
             this._avatarContainer.changeText('MISSION COMPLETED!')
         }
@@ -220,16 +253,25 @@ export default class MainScene extends Phaser.Scene{
         this.cameras.main.setBounds(0, 0, this._background.width, this._background.height);
 
         this._croissant?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(scale);  
-        this._croissant_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
+        if(!Boolean(this._croissant_key.getData('collected'))){
+            this._croissant_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
+        }else{
+            this._croissant_key?.setScale(this._background.scale);
+        }
 
+        this._dog_bone?.setPosition(1685 * this._background.scaleX, 2170 * this._background.scaleY).setScale(scale);  
+        if(!Boolean(this._dog_bone_key.getData('collected'))){
+            this._dog_bone_key?.setPosition(2035 * this._background.scaleX, 1460 * this._background.scaleY).setScale(this._background.scale);
+        }else{
+            this._dog_bone_key?.setScale(this._background.scale);
+        }
 
-        this._dog_bone?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(scale);  
-        this._dog_bone_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
-
-        this._tnt?.setPosition(2000 * this._background.scaleX, 840 * this._background.scaleY).setScale(scale);  
-        this._tnt_key?.setPosition(2820 * this._background.scaleX, 1940 * this._background.scaleY).setScale(this._background.scale);
-
-
+        this._tnt?.setPosition(2475 * this._background.scaleX, 2190 * this._background.scaleY).setScale(scale);  
+        if(!Boolean(this._tnt_key.getData('collected'))){
+            this._tnt_key?.setPosition(1475 * this._background.scaleX, 2235 * this._background.scaleY).setScale(this._background.scale);
+        }else{
+            this._tnt_key?.setScale(this._background.scale);
+        }
     }
 
 

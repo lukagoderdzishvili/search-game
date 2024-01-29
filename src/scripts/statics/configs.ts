@@ -9,7 +9,7 @@ export default class Configs{
         transparent: false,
         backgroundColor: '#000000',
         disableContextMenu: true,
-    
+        
         scale: {
             parent: 'app',
             mode: Phaser.Scale.RESIZE,
@@ -28,12 +28,14 @@ export default class Configs{
         },
     
         physics: {
-            default: 'arcade',            
+            
+            default: 'arcade',   
+            arcade: { debug: true }         
         },
         dom: {
             createContainer: true
         },
-    
+        
         //,
         //fps: {
         //    target: 60,

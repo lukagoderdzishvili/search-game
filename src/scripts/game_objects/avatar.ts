@@ -35,7 +35,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
     }
 
     public say(): void{
-        this._dialog = this._scene.add.image(30 * this._scale, -this._background.displayHeight / 2, 'dialog')
+        this._dialog = this._scene.add.image(-80 * this._scale, -this._background.displayHeight / 2 - 20 * this._scale, 'dialog')
         .setOrigin(this._config.origin.x, this._config.origin.y)
         .setDisplaySize(600 * this._scale, 0)
         .setAlpha(0);
@@ -54,7 +54,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
             },
 
             onComplete: () => {
-                 this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, ['Distract the guards', 'and escape', 'using dynamite'], { color: '#000000', fontSize: 20, fontFamily: 'cerapro', align: 'center'});
+                 this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, ['Distract the guards', 'and escape', 'using dynamite'], { color: '#000000', fontSize: 40 * this._scale, fontFamily: 'cerapro', align: 'center'});
                  this._text.x -= this._text.displayWidth / 2 - 45 * this._scale;
                  this.add(this._text)
         
@@ -72,6 +72,23 @@ export default class Avatar extends Phaser.GameObjects.Container{
 
     public onScreenChange(): void{
         this._scale = Math.min(innerWidth / 1024, innerHeight / 2000);
+        
+        this._background.setDisplaySize(
+            this._config.width * this._scale,
+            this._config.height * this._scale
+        ).setPosition(0, 0);
+
+        this._dialog
+        .setDisplaySize(600 * this._scale, 500 * this._scale)
+        .setPosition(-80 * this._scale, -this._background.displayHeight / 2 - 20 * this._scale);
+
+
+        if(this._text){
+            this._text.setFontSize(40 * this._scale);
+            this._text.setPosition(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale);
+            this._text.x -= this._text.displayWidth / 2 - 45 * this._scale;
+        }
+
         this.setPosition(innerWidth - 30 * this._scale, innerHeight - 30 * this._scale);
     }
 }
