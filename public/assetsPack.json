@@ -4,7 +4,7 @@
             {
                 "url": "assets/background.png",
                 "type": "image",
-                "key": "background"
+                "key": "background-1"
             },
             {
                 "url": "assets/arrow.png",
@@ -59,13 +59,85 @@
             {
                 "url": "assets/avatar.png",
                 "type": "image",
-                "key": "avatar"
+                "key": "avatar-1"
             },
 
             {
                 "url": "assets/pointer.png",
                 "type": "image",
                 "key": "pointer"
+            },
+
+            {
+                "url": "assets/avatar-2.png",
+                "type": "image",
+                "key": "avatar-2"
+            },
+
+            {
+                "url": "assets/background-2.png",
+                "type": "image",
+                "key": "background-2"
+            },
+
+            {
+                "url": "assets/crowbar_1.png",
+                "type": "image",
+                "key": "crowbar_1"
+            },
+
+            {
+                "url": "assets/crowbar_2.png",
+                "type": "image",
+                "key": "crowbar_2"
+            },
+
+            {
+                "url": "assets/donut_1.png",
+                "type": "image",
+                "key": "donut_1"
+            },
+
+            {
+                "url": "assets/donut_2.png",
+                "type": "image",
+                "key": "donut_2"
+            },
+
+            {
+                "url": "assets/rock_1.png",
+                "type": "image",
+                "key": "rock_1"
+            },
+
+            {
+                "url": "assets/rock_2.png",
+                "type": "image",
+                "key": "rock_2"
+            },
+
+            {
+                "url": "assets/crowbar_arrow.png",
+                "type": "image",
+                "key": "crowbar_arrow"
+            },
+
+            {
+                "url": "assets/avatar-3.png",
+                "type": "image",
+                "key": "avatar-3"
+            },
+
+            {
+                "url": "assets/background-3.png",
+                "type": "image",
+                "key": "background-3"
+            },
+
+            {
+                "url": "assets/burger.png",
+                "type": "image",
+                "key": "burger"
             }
         ]
     }

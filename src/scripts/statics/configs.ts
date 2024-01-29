@@ -59,7 +59,7 @@ export default class Configs{
     static avatar: AvatarConfig = {
         width: 240,
         height: 240,
-        texture: 'avatar',
+        texture: 'avatar-',
         origin: new Phaser.Math.Vector2(1, 1),
         scrollfactor: new Phaser.Math.Vector2(0, 0)
     }
@@ -68,7 +68,7 @@ export default class Configs{
     static background: BackgroundConfig = {
         width: 4945,
         height: 2781,
-        texture: 'background'
+        texture: 'background-'
     }
 
     static arrow: ArrowConfig = {

@@ -8,12 +8,19 @@ export default class Avatar extends Phaser.GameObjects.Container{
     private _dialog!: Phaser.GameObjects.Image;
     private _text!: Phaser.GameObjects.Text;
     private _scale: number = Math.min(innerWidth / 1024, innerHeight / 2000);
+    private _level: number;
+    private _texts: string[][] = [
+        ['Distract the guards', 'and escape', 'using dynamite'],
+        ['Sneak past the crime', 'lab undetected!'],
+        ['You must be hungry,', 'collect all the burgers!']
+    ];
 
-    constructor(scene: Phaser.Scene){
+    constructor(scene: Phaser.Scene, level: number){
         super(scene, innerWidth, innerHeight);
         this._scene = scene;
         this._config = Configs.avatar;
-
+        this._level = level;
+        this.setDepth(900);
         this._scene.add.existing(this);
         this.setScrollFactor(this._config.scrollfactor.x, this._config.scrollfactor.y);
 
@@ -23,7 +30,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
 
     private _create(): void{
         this._background = this._scene.add
-        .image(0, 0, this._config.texture)
+        .image(0, 0, this._config.texture + this._level)
         .setOrigin(this._config.origin.x, this._config.origin.y)
         .setDisplaySize(
             this._config.width * this._scale,
@@ -54,7 +61,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
             },
 
             onComplete: () => {
-                 this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, ['Distract the guards', 'and escape', 'using dynamite'], { color: '#000000', fontSize: 40 * this._scale, fontFamily: 'cerapro', align: 'center'});
+                 this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, this._texts[this._level - 1], { color: '#000000', fontSize: 40 * this._scale, fontFamily: 'cerapro', align: 'center'});
                  this._text.x -= this._text.displayWidth / 2 - 45 * this._scale;
                  this.add(this._text)
         
@@ -68,6 +75,13 @@ export default class Avatar extends Phaser.GameObjects.Container{
         this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, text, { color: '#000000', fontSize: 20, fontFamily: 'cerapro', align: 'center'});
         this._text.x -= this._text.displayWidth / 2 - 45 * this._scale;
         this.add(this._text)
+    }
+
+    public removeAllElements(): void{
+        this._background.destroy();
+        this._text?.destroy();
+        this._dialog?.destroy();
+        this.destroy();
     }
 
     public onScreenChange(): void{

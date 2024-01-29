@@ -9,6 +9,8 @@ export default class Box extends Phaser.GameObjects.Container{
     private _scale: number = Math.min(innerWidth / 1024, innerHeight / 2000);
     private _collected: Phaser.Physics.Arcade.Image[] = [];
 
+    private _burgerIcon!: Phaser.GameObjects.Image;
+
 
     constructor(scene: Phaser.Scene){
         super(scene, 0, innerHeight);
@@ -33,14 +35,21 @@ export default class Box extends Phaser.GameObjects.Container{
 
         this.add(this._background);
 
+        this._burgerIcon = this._scene.add.image(this._background.displayWidth - 70 * this._scale, -50 * this._scale, 'burger')
+        .setDisplaySize(
+            90 * this._scale,
+            80 * this._scale
+        ).setAlpha(0);
+        this.add(this._burgerIcon)
+
         this._addText();
     }
 
-    private _addText(): void{
+    private _addText(text?: string): void{
         this._text = this._scene.add.text(
             this._background.displayWidth / 2,
             -this._background.displayHeight / 2,
-            '?',
+            text ?? '?',
             { color: '#ffffff', fontFamily: 'cerapro', fontSize: 100 * this._scale}
         );
         this._text.x -= this._text.displayWidth / 2 + 20 * this._scale;
@@ -53,31 +62,47 @@ export default class Box extends Phaser.GameObjects.Container{
 
     public addItem(item: Phaser.Physics.Arcade.Image): void{
         this._text?.destroy();
+        const isBurger: boolean = item.getData('name') === 'burger';
         item.setData('collected', true);
-        if(this._collected.findIndex(object => object.getData('name') === item.getData('name')) === -1){
+        if(this._collected.findIndex(object => object.getData('name') === item.getData('name')) === -1 || isBurger){
             this._collected.push(item);
         }
-
         
         this._scene.add.tween({
 
             targets: item,
-            
+            scale: isBurger ? 0 : item.scale,
             scrollFactorX: 0,
             scrollFactorY: 0,
-            x: this._background.getBounds().left + (100 * (this._collected.findIndex(object => object.getData('name') === item.getData('name')) + 1) * this._scale),
+            x: isBurger ? this._background.getBounds().centerX : this._background.getBounds().left + (100 * (this._collected.findIndex(object => object.getData('name') === item.getData('name')) + 1) * this._scale),
             y: this._background.getBounds().centerY,
             duration: 300,
 
             onStart: () => {
                
                 item.setDepth(this.depth + 1);
+            },
+
+            onComplete: () => {
+                if(isBurger){
+                    this._text?.destroy();
+                    this._addText(this._collected.length.toString());
+                }
             }
         });
     }
 
     public removeItem(item: Phaser.Physics.Arcade.Image): void{
         this._collected.filter(object => object.getData('name') !== item.getData('name'));
+    }
+
+    public removeAllItem(): void{
+        this._collected.length = 0;
+        this._collected = [];
+    }
+
+    public showBurgerIcon(): void{
+        this._burgerIcon.setAlpha(1);
     }
 
     public onScreenChange(): void{
@@ -97,9 +122,17 @@ export default class Box extends Phaser.GameObjects.Container{
 
         this.setPosition(0, innerHeight + 5 * this._scale);
 
+        if(this._collected.length > 0 && this._collected[0].getData('name') !== 'burger'){
+            
+            this._collected.forEach((item, index) => {
+                item.setPosition(this._background.getBounds().left + ((100 * (index + 1)) * this._scale), this._background.getBounds().centerY)
+            });
+        }
 
-        this._collected.forEach((item, index) => {
-            item.setPosition(this._background.getBounds().left + ((100 * (index + 1)) * this._scale), this._background.getBounds().centerY)
-        })
+        this._burgerIcon.setPosition(this._background.displayWidth - 70 * this._scale, -50 * this._scale)
+        .setDisplaySize(
+            90 * this._scale,
+            80 * this._scale
+        );
     }
 }
