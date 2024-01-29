@@ -6,6 +6,7 @@ export default class Box extends Phaser.GameObjects.Container{
     private _background!: Phaser.GameObjects.Image;
     private _text!: Phaser.GameObjects.Text;
     private _config: BoxConfig;
+    private _scale: number = Math.min(innerWidth / 1024, innerHeight / 2000);
 
 
     constructor(scene: Phaser.Scene){
@@ -25,32 +26,28 @@ export default class Box extends Phaser.GameObjects.Container{
         .image(0, 0, this._config.texture)
         .setOrigin(this._config.origin.x, this._config.origin.y)
         .setDisplaySize(
-            this._config.width,
-            this._config.height
+            this._config.width * this._scale,
+            this._config.height * this._scale
         );
 
         this.add(this._background);
 
 
-        this._text = this._scene.add.text(this._config.width / 2 - 10, -25, '?', { color: '#ffffff', fontSize: 75}).setScale(2)
-        .setOrigin(this._config.origin.x, this._config.origin.y).setResolution(10);
-        this._text.x -= this._text.displayWidth / 2;
+        this._text = this._scene.add.text(
+            this._background.displayWidth / 2,
+            -this._background.displayHeight / 2,
+            '?',
+            { color: '#ffffff', fontFamily: 'cerapro', fontSize: 100 * this._scale}
+        );
+        this._text.x -= this._text.displayWidth / 2 + 20 * this._scale;
+        this._text.y -= this._text.displayHeight / 2;
 
 
         this.add(this._text);
     }
 
-
-    public changeLevelText(newLevel: string): void{
-        this._text.setText(newLevel);
-    }
-
     public onScreenChange(): void{
-        const width: number = (innerWidth / 1024);
-        const height: number = (innerHeight / 2000)
-        const scale: number = Math.min(width, height);
- 
-        this.setPosition(0, innerHeight + 5 * scale);
-        this.setScale(scale)
+        this._scale = Math.min(innerWidth / 1024, innerHeight / 2000);
+        this.setPosition(0, innerHeight + 5 * this._scale);
     }
 }

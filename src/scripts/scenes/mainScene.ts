@@ -182,8 +182,7 @@ export default class MainScene extends Phaser.Scene{
             if(this._croissant.active || this._tnt.active || this._dog_bone.active)return;
             this._isDraggingKey = false;
             this._currentLevel = 2;
-          //  this._collectedContainer.changeLevelText('2');
-           this._avatarContainer.changeText('MISSION COMPLETED!')
+            this._avatarContainer.changeText('MISSION COMPLETED!')
         }
     }
 
