@@ -262,7 +262,7 @@ export default class MainScene extends Phaser.Scene{
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._croissant, this._croissant_key, () => {
             if(!this._isDraggingKey)return;
             this._pointerImage.setAlpha(0);
-            this._collectedContainer.removeItem(this._croissant_key);
+            this._collectedContainer.removeAllItem();
             this._croissant.destroy();
             this._croissant_key.destroy();
             this._checkLevelComplete();
@@ -312,7 +312,7 @@ export default class MainScene extends Phaser.Scene{
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._dog_bone, this._dog_bone_key, () => {
             if(!this._isDraggingKey)return;
             this._pointerImage.setAlpha(0);
-            this._collectedContainer.removeItem(this._dog_bone_key);
+            this._collectedContainer.removeAllItem();
             this._dog_bone.destroy();
             this._dog_bone_key.destroy();
             this._checkLevelComplete();
@@ -359,7 +359,7 @@ export default class MainScene extends Phaser.Scene{
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._tnt, this._tnt_key, () => {
             console.log('tnt');
             if(!this._isDraggingKey)return;
-            this._collectedContainer.removeItem(this._tnt_key);
+            this._collectedContainer.removeAllItem();
             this._pointerImage.setAlpha(0);
             this._tnt.destroy();
             this._tnt_key.destroy();
@@ -407,7 +407,7 @@ export default class MainScene extends Phaser.Scene{
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._crowbar, this._crowbar_key, () => {
             if(!this._isDraggingKey)return;
             this._pointerImage.setAlpha(0);
-            this._collectedContainer.removeItem(this._crowbar_key);
+            this._collectedContainer.removeAllItem();
             this._crowbar?.destroy();
             this._crowbar = null;
             this._crowbarArrow.destroy();
@@ -452,7 +452,7 @@ export default class MainScene extends Phaser.Scene{
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._donut, this._donut_key, () => {
             if(!this._isDraggingKey)return;
             this._pointerImage.setAlpha(0);
-            this._collectedContainer.removeItem(this._donut_key);
+            this._collectedContainer.removeAllItem();
             this._donut?.destroy();
             this._donut = null;
             this._donut_key.destroy();
@@ -501,7 +501,7 @@ export default class MainScene extends Phaser.Scene{
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._rock, this._rock_key, () => {
             if(!this._isDraggingKey)return;
             this._pointerImage.setAlpha(0);
-            this._collectedContainer.removeItem(this._rock_key);
+            this._collectedContainer.removeAllItem();
             this._rock?.destroy();
             this._rock = null;
             this._rock_key.destroy();
