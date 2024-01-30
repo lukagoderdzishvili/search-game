@@ -30,7 +30,7 @@ export default class Configs{
         physics: {
             
             default: 'arcade',   
-            arcade: { debug: false }         
+            arcade: { debug: true }         
         },
         dom: {
             createContainer: true

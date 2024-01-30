@@ -2,7 +2,7 @@
     "section1": {
         "files": [
             {
-                "url": "assets/background.png",
+                "url": "assets/background-1-new.jpg",
                 "type": "image",
                 "key": "background-1"
             },
@@ -75,7 +75,7 @@
             },
 
             {
-                "url": "assets/background-2.png",
+                "url": "assets/background-2-new.jpg",
                 "type": "image",
                 "key": "background-2"
             },
@@ -129,7 +129,7 @@
             },
 
             {
-                "url": "assets/background-33.png",
+                "url": "assets/background-3-new.jpg",
                 "type": "image",
                 "key": "background-3"
             },
