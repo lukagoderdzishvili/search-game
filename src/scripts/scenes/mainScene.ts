@@ -136,7 +136,13 @@ export default class MainScene extends Phaser.Scene{
         .setDepth(1000)
         .setDisplaySize(102 * this._scale, 77 * this._scale);
 
-        this._firstLevelTutorial();
+        if(this._currentLevel === 1){
+            this._firstLevelTutorial();
+        }else if(this._currentLevel === 2){
+            this._secondLevelTutorial();
+        }else{
+            this._thirdLevelTutorial();
+        }
     }
 
     private _firstLevelTutorial(): void{
@@ -205,7 +211,7 @@ export default class MainScene extends Phaser.Scene{
 
     private _thirdLevelTutorial(): void{
         this._tutorialPointer = this.add
-        .image(this._burger1.x , this._burger1.y , 'pointer')
+        .image(this._burger8.x , this._burger8.y , 'pointer')
         .setDepth(800)
         .setDisplaySize(102 * this._scale, 77 * this._scale);
 
@@ -506,72 +512,77 @@ export default class MainScene extends Phaser.Scene{
     }
 
     private _drawBurgers(): void{
-        this._burger1 = this.physics.add.image(2250 * this._background.scaleX, 1330 * this._background.scaleY, 'burger')
+        this._burger1 = this.physics.add.image(5560 * this._background.scaleX, 1300 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
-        .setScale(this._background.scale)
+        .setScale(this._background.scale * 0.9)
         .setInteractive()
         .on('pointerdown', () => {
-            this._tutorialCompleted = true;
-            this._tutorialPointer?.destroy();
-            this._tutorialTweenFirstPart?.destroy();
-            this._tutorialTweenSecondPart?.destroy(); 
-
             this._collectedContainer.addItem(this._burger1);
         });
-        this._burger2 = this.physics.add.image(2180 * this._background.scaleX, 1500 * this._background.scaleY, 'burger')
+        this._burger2 = this.physics.add.image(5950 * this._background.scaleX, 1520 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
-        .setScale(this._background.scale) 
+        .setScale(this._background.scale)
+        .setRotation(Phaser.Math.DegToRad(-2))
         .setInteractive()
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger2);
         });
 
-        this._burger3 = this.physics.add.image(1800 * this._background.scaleX, 1450 * this._background.scaleY, 'burger')
+        this._burger3 = this.physics.add.image(5105 * this._background.scaleX, 1450 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
-        .setScale(this._background.scale) 
+        .setScale(this._background.scale * 0.5) 
         .setInteractive()
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger3);
         });
         
-        this._burger4 = this.physics.add.image(1460 * this._background.scaleX, 1490 * this._background.scaleY, 'burger')
+        this._burger4 = this.physics.add.image(4470 * this._background.scaleX, 750 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
         .setFlip(true, false)
         .setScale(this._background.scale) 
+        .setRotation(Phaser.Math.DegToRad(22))
         .setInteractive()
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger4);
         });
 
-        this._burger5 = this.physics.add.image(2600 * this._background.scaleX, 1500 * this._background.scaleY, 'burger')
+        this._burger5 = this.physics.add.image(4085 * this._background.scaleX, 1330 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
         .setScale(this._background.scale) 
+        .setRotation(Phaser.Math.DegToRad(-10))
         .setInteractive()
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger5);
         });
 
-        this._burger6 = this.physics.add.image(2700 * this._background.scaleX, 1540 * this._background.scaleY, 'burger')
+        this._burger6 = this.physics.add.image(2910 * this._background.scaleX, 1400 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
         .setScale(this._background.scale) 
         .setInteractive()
+        .setRotation(Phaser.Math.DegToRad(-5))
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger6);
         });
 
-        this._burger7 = this.physics.add.image(3100 * this._background.scaleX, 1150 * this._background.scaleY, 'burger')
+        this._burger7 = this.physics.add.image(2380 * this._background.scaleX, 840 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
         .setScale(this._background.scale) 
         .setInteractive()
+        .setRotation(Phaser.Math.DegToRad(-15))
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger7);
         });
         
-        this._burger8 = this.physics.add.image(3520 * this._background.scaleX, 1600 * this._background.scaleY, 'burger')
+        this._burger8 = this.physics.add.image(2030 * this._background.scaleX, 1350 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
-        .setScale(this._background.scale) 
+        .setScale(this._background.scale * 0.9) 
         .setInteractive()
+        .setRotation(Phaser.Math.DegToRad(-15))
         .on('pointerdown', () => {
+            this._tutorialCompleted = true;
+            this._tutorialPointer?.destroy();
+            this._tutorialTweenFirstPart?.destroy();
+            this._tutorialTweenSecondPart?.destroy(); 
             this._collectedContainer.addItem(this._burger8);
         });
 
@@ -579,13 +590,14 @@ export default class MainScene extends Phaser.Scene{
         .setData('name', 'burger')
         .setScale(this._background.scale) 
         .setInteractive()
+        .setRotation(Phaser.Math.DegToRad(-20))
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger9);
         });
 
-        this._burger10 = this.physics.add.image(1200 * this._background.scaleX, 750 * this._background.scaleY, 'burger')
+        this._burger10 = this.physics.add.image(1485 * this._background.scaleX, 1400 * this._background.scaleY, 'burger')
         .setData('name', 'burger')
-        .setScale(this._background.scale) 
+        .setScale(this._background.scale * 0.8) 
         .setInteractive()
         .on('pointerdown', () => {
             this._collectedContainer.addItem(this._burger10);
@@ -693,34 +705,34 @@ export default class MainScene extends Phaser.Scene{
             }
 
         }else if(this._currentLevel === 3){
-            this._burger1.setPosition(2250 * this._background.scaleX, 1330 * this._background.scaleY)
-            .setScale(this._background.scale);
-            this._burger2.setPosition(2180 * this._background.scaleX, 1500 * this._background.scaleY)
+            this._burger1.setPosition(5560 * this._background.scaleX, 1300 * this._background.scaleY)
+            .setScale(this._background.scale * 0.9);
+            this._burger2.setPosition(5950 * this._background.scaleX, 1520 * this._background.scaleY)
             .setScale(this._background.scale);
     
-            this._burger3.setPosition(1800 * this._background.scaleX, 1450 * this._background.scaleY)
-            .setScale(this._background.scale);
-            this._burger4.setPosition(1460 * this._background.scaleX, 1490 * this._background.scaleY)
+            this._burger3.setPosition(5105 * this._background.scaleX, 1450 * this._background.scaleY)
+            .setScale(this._background.scale * 0.5);
+            this._burger4.setPosition(4470 * this._background.scaleX, 750 * this._background.scaleY)
             .setFlip(true, false)
             .setScale(this._background.scale);
     
-            this._burger5.setPosition(2600 * this._background.scaleX, 1500 * this._background.scaleY)
+            this._burger5.setPosition(4085 * this._background.scaleX, 1330 * this._background.scaleY)
             .setScale(this._background.scale);
     
-            this._burger6.setPosition(2700 * this._background.scaleX, 1540 * this._background.scaleY)
+            this._burger6.setPosition(2910 * this._background.scaleX, 1400 * this._background.scaleY)
             .setScale(this._background.scale);
     
-            this._burger7.setPosition(3100 * this._background.scaleX, 1150 * this._background.scaleY)
+            this._burger7.setPosition(2380 * this._background.scaleX, 840 * this._background.scaleY)
             .setScale(this._background.scale);
             
-            this._burger8.setPosition(3520 * this._background.scaleX, 1600 * this._background.scaleY)
-            .setScale(this._background.scale);
+            this._burger8.setPosition(2030 * this._background.scaleX, 1350 * this._background.scaleY)
+            .setScale(this._background.scale * 0.9);
     
             this._burger9.setPosition(780 * this._background.scaleX, 1300 * this._background.scaleY)
             .setScale(this._background.scale);
     
-            this._burger10.setPosition(1200 * this._background.scaleX, 750 * this._background.scaleY)
-            .setScale(this._background.scale);
+            this._burger10.setPosition(1485 * this._background.scaleX, 1400 * this._background.scaleY)
+            .setScale(this._background.scale * 0.8);
         }
     }
 
@@ -744,7 +756,7 @@ export default class MainScene extends Phaser.Scene{
                 this._firstLevelTutorial();
             }else if(this._currentLevel === 2 && this._rock){
                 this._secondLevelTutorial();
-            }else if(this._currentLevel === 3 && this._burger1){
+            }else if(this._currentLevel === 3 && this._burger8){
                 this._thirdLevelTutorial();
             }
         }
