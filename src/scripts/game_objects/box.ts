@@ -87,6 +87,7 @@ export default class Box extends Phaser.GameObjects.Container{
                 if(isBurger){
                     this._text?.destroy();
                     this._addText(this._collected.length.toString());
+                    item?.destroy();
                 }
             }
         });
