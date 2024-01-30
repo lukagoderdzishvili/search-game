@@ -46,6 +46,7 @@ export default class Box extends Phaser.GameObjects.Container{
     }
 
     private _addText(text?: string): void{
+     
         this._text = this._scene.add.text(
             this._background.displayWidth / 2,
             -this._background.displayHeight / 2,
@@ -57,6 +58,9 @@ export default class Box extends Phaser.GameObjects.Container{
 
 
         this.add(this._text);
+        if(text && +text === 10){
+            window.parent.postMessage('LevelComplete3',"*");
+        }
     }
 
 

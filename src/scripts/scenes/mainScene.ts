@@ -17,7 +17,7 @@ export default class MainScene extends Phaser.Scene{
     private _controller!: Controller;
 
 
-    private _currentLevel: number = 1;
+    private _currentLevel: number = 2;
 
 
     //LEVEL 1 OBJECTS
@@ -281,7 +281,7 @@ export default class MainScene extends Phaser.Scene{
             scale: '/=2',
             repeat: -1,
             yoyo: true,
-            duration: 500,
+            duration: 500
         });
 
     }
@@ -708,6 +708,12 @@ export default class MainScene extends Phaser.Scene{
             this._tutorialTweenFirstPart?.destroy();
             this._tutorialTweenSecondPart?.destroy(); 
             this._collectedContainer.addItem(this._burger8);
+        })
+        .on('pointerup', () => {
+            this._tutorialPointer?.destroy();
+            this._tutorialTweenFirstPart?.destroy();
+            this._tutorialTweenSecondPart?.destroy(); 
+
         });
 
         this._burger9 = this.physics.add.image((280 / this._extraScale) * this._background.scaleX, (1480 / this._extraScale) * this._background.scaleY, 'burger')
@@ -743,6 +749,7 @@ export default class MainScene extends Phaser.Scene{
             this._drawRock();
             this._tutorialCompleted = false;
             this._secondLevelTutorial('first');
+            window.parent.postMessage('LevelComplete1',"*");
 
         }else if(this._currentLevel === 2){
             if(this._rock !== null || this._donut !== null || this._crowbar !== null)return;
@@ -757,6 +764,7 @@ export default class MainScene extends Phaser.Scene{
             this._drawBurgers();
             this.onScreenChange();
             this._thirdLevelTutorial();
+            window.parent.postMessage('LevelComplete2',"*");
         }
     }
 
@@ -885,8 +893,6 @@ export default class MainScene extends Phaser.Scene{
                 this._firstLevelTutorial(this._firstLevelTutorialPart);
             }else if(this._currentLevel === 2 && this._rock){
                 this._secondLevelTutorial(this._secondLevelTutorialPart);
-            }else if(this._currentLevel === 3 && this._burger8){
-                this._thirdLevelTutorial();
             }
         }
 

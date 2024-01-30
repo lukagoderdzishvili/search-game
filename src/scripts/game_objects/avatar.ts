@@ -61,7 +61,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
             },
 
             onComplete: () => {
-                 this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, this._texts[this._level - 1], { color: '#000000', fontSize: 40 * this._scale, fontFamily: 'cerapro', align: 'center'});
+                 this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, this._texts[this._level - 1], { color: '#000000', fontSize: 50 * this._scale, fontFamily: 'cerapro', align: 'center'});
                  this._text.x -= this._text.displayWidth / 2 - 45 * this._scale;
                  this.add(this._text)
         
@@ -72,7 +72,7 @@ export default class Avatar extends Phaser.GameObjects.Container{
 
     public changeText(text: string | string[]): void{
         if(this._text)this._text.destroy();
-        this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale, text, { color: '#000000', fontSize: 20, fontFamily: 'cerapro', align: 'center'});
+        this._text = this._scene.add.text(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 45 * this._scale, text, { color: '#000000', fontSize: 50, fontFamily: 'cerapro', align: 'center'});
         this._text.x -= this._text.displayWidth / 2 - 45 * this._scale;
         this.add(this._text)
     }
@@ -98,8 +98,8 @@ export default class Avatar extends Phaser.GameObjects.Container{
 
 
         if(this._text){
-            this._text.setFontSize(40 * this._scale);
-            this._text.setPosition(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 25 * this._scale);
+            this._text.setFontSize(50 * this._scale);
+            this._text.setPosition(-this._dialog.displayWidth / 2 - this._background.displayWidth / 2, -this._background.displayHeight - this._dialog.displayHeight / 2 - 45 * this._scale);
             this._text.x -= this._text.displayWidth / 2 - 45 * this._scale;
         }
 
