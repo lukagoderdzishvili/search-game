@@ -57,6 +57,11 @@ export default class MainScene extends Phaser.Scene{
     private _pointerImage!: Phaser.GameObjects.Image;
     private _scale: number = Math.min(innerWidth / 1024, innerHeight / 2000);
 
+    private _tutorialPointer!: Phaser.GameObjects.Image;
+    private _tutorialTweenFirstPart!: Phaser.Tweens.Tween;
+    private _tutorialTweenSecondPart!: Phaser.Tweens.Tween;
+    private _tutorialCompleted: boolean = false;
+
     constructor(){
         super({ key: 'MainScene' });
     }
@@ -131,6 +136,88 @@ export default class MainScene extends Phaser.Scene{
         .setDepth(1000)
         .setDisplaySize(102 * this._scale, 77 * this._scale);
 
+        this._firstLevelTutorial();
+    }
+
+    private _firstLevelTutorial(): void{
+        this._tutorialPointer = this.add
+        .image(this._dog_bone_key.x , this._dog_bone_key.y , 'pointer')
+        .setDepth(800)
+        .setDisplaySize(102 * this._scale, 77 * this._scale);
+
+        this._tutorialTweenFirstPart = this.tweens.add({
+            targets: this._tutorialPointer,
+            scale: '/=2',
+            repeat: 1,
+            yoyo: true,
+            duration: 500,
+
+            onComplete: () => {
+                this._tutorialTweenSecondPart = this.tweens.add({
+                    targets: this._tutorialPointer,
+                    x: () => this._dog_bone.x,
+                    y: () => this._dog_bone.y,
+                    duration: 2000,
+                    repeat: 1,
+
+                    onComplete: () => {
+                        if(!this._tutorialCompleted){
+                            this._tutorialPointer.destroy();
+                            this._firstLevelTutorial();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private _secondLevelTutorial(): void{
+        this._tutorialPointer = this.add
+        .image(this._rock_key.x , this._rock_key.y , 'pointer')
+        .setDepth(800)
+        .setDisplaySize(102 * this._scale, 77 * this._scale);
+
+        this._tutorialTweenFirstPart = this.tweens.add({
+            targets: this._tutorialPointer,
+            scale: '/=2',
+            repeat: 1,
+            yoyo: true,
+            duration: 500,
+
+            onComplete: () => {
+                this._tutorialTweenSecondPart = this.tweens.add({
+                    targets: this._tutorialPointer,
+                    x: () => (<Phaser.Physics.Arcade.Image>this._rock).x ,
+                    y: () => (<Phaser.Physics.Arcade.Image>this._rock).y,
+                    duration: 2000,
+                    repeat: 1,
+
+                    onComplete: () => {
+                        if(!this._tutorialCompleted){
+                            this._tutorialPointer.destroy();
+                            this._secondLevelTutorial();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private _thirdLevelTutorial(): void{
+        this._tutorialPointer = this.add
+        .image(this._burger1.x , this._burger1.y , 'pointer')
+        .setDepth(800)
+        .setDisplaySize(102 * this._scale, 77 * this._scale);
+
+        
+        this._tutorialTweenFirstPart = this.tweens.add({
+            targets: this._tutorialPointer,
+            scale: '/=2',
+            repeat: -1,
+            yoyo: true,
+            duration: 500,
+        });
+
     }
 
     private _drawCroissant(): void{
@@ -161,7 +248,9 @@ export default class MainScene extends Phaser.Scene{
         }).on('dragend', (_pointer: any) => {
             this._pointerImage.setAlpha(0);
             this._isDraggingKey = false;
-            this._collectedContainer.addItem(this._croissant_key);
+            if(this._collectedContainer.isEmpty(this._croissant_key.getData('name'))){
+                this._collectedContainer.addItem(this._croissant_key);
+            }
         });
 
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._croissant, this._croissant_key, () => {
@@ -185,6 +274,11 @@ export default class MainScene extends Phaser.Scene{
         .setData('name', 'bone')
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
         .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+            this._tutorialCompleted = true;
+            this._tutorialPointer?.destroy();
+            this._tutorialTweenFirstPart?.destroy();
+            this._tutorialTweenSecondPart?.destroy(); 
+
             this._pointerImage.setPosition(pointer.x + this._pointerImage.displayWidth / 4, pointer.y + this._pointerImage.displayHeight / 4).setAlpha(1);
 
             if(this._dog_bone_key.getData('collected')){
@@ -203,7 +297,9 @@ export default class MainScene extends Phaser.Scene{
         }).on('dragend', (_pointer: any) => {
             this._pointerImage.setAlpha(0);
             this._isDraggingKey = false;
-            this._collectedContainer.addItem(this._dog_bone_key);
+            if(this._collectedContainer.isEmpty(this._dog_bone_key.getData('name'))){
+                this._collectedContainer.addItem(this._dog_bone_key);
+            }
             
         });
 
@@ -249,7 +345,9 @@ export default class MainScene extends Phaser.Scene{
         }).on('dragend', (_pointer: any) => {
             this._pointerImage.setAlpha(0);
             this._isDraggingKey = false;
-            this._collectedContainer.addItem(this._tnt_key);
+            if(this._collectedContainer.isEmpty(this._tnt_key.getData('name'))){
+                this._collectedContainer.addItem(this._tnt_key);
+            }
         });
 
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._tnt, this._tnt_key, () => {
@@ -370,6 +468,10 @@ export default class MainScene extends Phaser.Scene{
          .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
          .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
              this._pointerImage.setPosition(pointer.x + this._pointerImage.displayWidth / 4, pointer.y + this._pointerImage.displayHeight / 4).setAlpha(1);
+             this._tutorialCompleted = true;
+             this._tutorialPointer?.destroy();
+             this._tutorialTweenFirstPart?.destroy();
+             this._tutorialTweenSecondPart?.destroy(); 
 
             if(this._rock_key.getData('collected')){
                 this._rock_key.setOffset(this.cameras.main.scrollX * (1 / this._scale), this.cameras.main.scrollY * (1 / this._scale));
@@ -409,6 +511,11 @@ export default class MainScene extends Phaser.Scene{
         .setScale(this._background.scale)
         .setInteractive()
         .on('pointerdown', () => {
+            this._tutorialCompleted = true;
+            this._tutorialPointer?.destroy();
+            this._tutorialTweenFirstPart?.destroy();
+            this._tutorialTweenSecondPart?.destroy(); 
+
             this._collectedContainer.addItem(this._burger1);
         });
         this._burger2 = this.physics.add.image(2180 * this._background.scaleX, 1500 * this._background.scaleY, 'burger')
@@ -496,6 +603,9 @@ export default class MainScene extends Phaser.Scene{
             this._avatarContainer = new Avatar(this, this._currentLevel);
             this._collectedContainer.removeAllItem();
             this._drawRock();
+            this._tutorialCompleted = false;
+            this._secondLevelTutorial();
+
         }else if(this._currentLevel === 2){
             if(this._rock !== null || this._donut !== null || this._crowbar !== null)return;
             this._currentLevel = 3;
@@ -506,6 +616,7 @@ export default class MainScene extends Phaser.Scene{
             this._collectedContainer.removeAllItem();
             this._drawBurgers();
             this.onScreenChange();
+            this._thirdLevelTutorial();
         }
     }
 
@@ -623,6 +734,20 @@ export default class MainScene extends Phaser.Scene{
         this._avatarContainer?.onScreenChange();       
         this._controller?.onScreenChange(); 
         this._controllerCallback(0, 0);
+
+        if(!this._tutorialCompleted){
+            this._tutorialPointer?.destroy();
+            this._tutorialTweenFirstPart?.destroy();
+            this._tutorialTweenSecondPart?.destroy(); 
+
+            if(this._currentLevel === 1 && this._dog_bone){
+                this._firstLevelTutorial();
+            }else if(this._currentLevel === 2 && this._rock){
+                this._secondLevelTutorial();
+            }else if(this._currentLevel === 3 && this._burger1){
+                this._thirdLevelTutorial();
+            }
+        }
 
     }
 }

@@ -74,7 +74,7 @@ export default class Box extends Phaser.GameObjects.Container{
             scale: isBurger ? 0 : item.scale,
             scrollFactorX: 0,
             scrollFactorY: 0,
-            x: isBurger ? this._background.getBounds().centerX : this._background.getBounds().left + (100 * (this._collected.findIndex(object => object.getData('name') === item.getData('name')) + 1) * this._scale),
+            x: this._background.getBounds().centerX,
             y: this._background.getBounds().centerY,
             duration: 300,
 
@@ -103,6 +103,12 @@ export default class Box extends Phaser.GameObjects.Container{
 
     public showBurgerIcon(): void{
         this._burgerIcon.setAlpha(1);
+    }
+
+    public isEmpty(name: string): boolean{
+        let index: number = this._collected.findIndex(item => item.getData('name') === name);
+        if(index !== -1)return true;
+        return this._collected.length === 0;
     }
 
     public onScreenChange(): void{
