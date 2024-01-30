@@ -30,20 +30,11 @@ export default class Configs{
         physics: {
             
             default: 'arcade',   
-            arcade: { debug: true }         
+            arcade: { debug: false }         
         },
         dom: {
             createContainer: true
-        },
-        
-        //,
-        //fps: {
-        //    target: 60,
-        //    forceSetTimeOut: true,
-        //    deltaHistory: 10,
-        //    panicMax: 120,
-        //    smoothStep: false
-        //}         
+        }
     };
 
 

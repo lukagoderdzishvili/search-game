@@ -435,7 +435,6 @@ export default class MainScene extends Phaser.Scene{
         });
 
         const collide: Phaser.Physics.Arcade.Collider = this.physics.add.collider(this._tnt, this._tnt_key, () => {
-            console.log('tnt');
             if(!this._isDraggingKey)return;
             this._collectedContainer.removeAllItem();
             this._pointerImage.setAlpha(0);
@@ -877,7 +876,6 @@ export default class MainScene extends Phaser.Scene{
 
     public onScreenChange(): void{
         this._scale = (Math.min(innerWidth / 1024, innerHeight / 2000)) * (this._currentLevel === 3 ? 1.25 : 1);
-        console.log('resize event');
         this._resizeBackground();
         this._collectedContainer?.onScreenChange();
         this._avatarContainer?.onScreenChange();       
