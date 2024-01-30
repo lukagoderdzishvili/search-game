@@ -279,12 +279,13 @@ export default class MainScene extends Phaser.Scene{
         .setScale(this._background.scale)
         .setData('name', 'bone')
         .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
-        .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+        .on('pointerdown', () => {
             this._tutorialCompleted = true;
             this._tutorialPointer?.destroy();
             this._tutorialTweenFirstPart?.destroy();
             this._tutorialTweenSecondPart?.destroy(); 
-
+        })
+        .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
             this._pointerImage.setPosition(pointer.x + this._pointerImage.displayWidth / 4, pointer.y + this._pointerImage.displayHeight / 4).setAlpha(1);
 
             if(this._dog_bone_key.getData('collected')){
@@ -472,13 +473,15 @@ export default class MainScene extends Phaser.Scene{
          .setScale(this._background.scale)
          .setData('name', 'rock')
          .setInteractive({ cursor: 'pointer', draggable: true }) // Enable draggable property
+         .on('pointerdown', () => {
+            this._tutorialCompleted = true;
+            this._tutorialPointer?.destroy();
+            this._tutorialTweenFirstPart?.destroy();
+            this._tutorialTweenSecondPart?.destroy(); 
+        })
          .on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
              this._pointerImage.setPosition(pointer.x + this._pointerImage.displayWidth / 4, pointer.y + this._pointerImage.displayHeight / 4).setAlpha(1);
-             this._tutorialCompleted = true;
-             this._tutorialPointer?.destroy();
-             this._tutorialTweenFirstPart?.destroy();
-             this._tutorialTweenSecondPart?.destroy(); 
-
+     
             if(this._rock_key.getData('collected')){
                 this._rock_key.setOffset(this.cameras.main.scrollX * (1 / this._scale), this.cameras.main.scrollY * (1 / this._scale));
             }else{
