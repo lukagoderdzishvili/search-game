@@ -131,8 +131,8 @@ export default class Box extends Phaser.GameObjects.Container{
 
         if(this._collected.length > 0 && this._collected[0].getData('name') !== 'burger'){
             
-            this._collected.forEach((item, index) => {
-                item.setPosition(this._background.getBounds().left + ((100 * (index + 1)) * this._scale), this._background.getBounds().centerY)
+            this._collected.forEach((item) => {
+                item.setPosition(this._background.getBounds().centerX, this._background.getBounds().centerY)
             });
         }
 
