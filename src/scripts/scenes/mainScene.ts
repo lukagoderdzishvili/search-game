@@ -17,7 +17,7 @@ export default class MainScene extends Phaser.Scene{
     private _controller!: Controller;
 
 
-    private _currentLevel: number = 2;
+    private _currentLevel: number = 1;
 
 
     //LEVEL 1 OBJECTS
